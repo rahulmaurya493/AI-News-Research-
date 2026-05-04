@@ -1,0 +1,13 @@
+streamlit
+newsapi-python
+langchain
+langchain-core
+langchain-text-splitters
+langchain-community
+sentence-transformers
+faiss-cpu
+groq
+spacy
+pandas
+numpy
+scikit-learn
