@@ -279,7 +279,7 @@ def build_pipeline(news_key, groq_key, query, max_articles, days_back):
 
         # Step 5
         st.write("🤖 Connecting Groq LLM...")
-        groq_client = get_groq_client(groq_key)
+        groq_client = get_groq_client(final_groq_api_key)
         st.write("✅ LLM connected!")
 
         # Save to session state
