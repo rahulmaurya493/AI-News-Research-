@@ -1,4 +1,5 @@
 User Question
+
      ↓
 Fetch news articles (NewsAPI)
      ↓
