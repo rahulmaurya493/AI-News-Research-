@@ -233,8 +233,12 @@ def render_sidebar():
 def build_pipeline(news_key, groq_key, query, max_articles, days_back):
     """Fetch news + build full RAG pipeline."""
 
-    if not news_key or not groq_key:
-        st.error("❌ Please enter both API keys in sidebar!")
+    # 1. PRIORITY CHECK: Use the manual input if provided, otherwise check Secrets
+    final_news_api_key = news_key if news_key else st.secrets.get("news_key", "")
+    final_groq_api_key = groq_key if groq_key else st.secrets.get("groq_key", "")
+
+    if not final_news_api_key or not final_groq_api_key:
+        st.error("❌ Please enter API keys in sidebar or add them to Streamlit Secrets!")
         return
 
     if not query:
