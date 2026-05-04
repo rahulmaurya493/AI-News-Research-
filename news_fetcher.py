@@ -301,10 +301,19 @@ def load_articles(query, folder="data"):
 if __name__ == "__main__":
 
     # ── Replace with your actual key ──
-    API_KEY = "2972c76c12ad48e4b4f49c7209494934"
+import streamlit as st
 
-    # Step 1: Connect
-    client = get_news_client(API_KEY)
+# 1. Pull the key from your Streamlit Dashboard Secrets
+# This replaces the literal "2972c7..." string
+API_KEY = st.secrets.get("news_key", "")
+
+# 2. Check if the key exists before connecting
+if not API_KEY:
+    st.error("❌ NewsAPI key not found in Streamlit Secrets!")
+    st.stop()
+
+# Step 1: Connect
+client = get_news_client(API_KEY)
 
     # Step 2: Fetch articles
     articles = fetch_articles(
