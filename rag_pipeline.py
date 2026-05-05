@@ -22,7 +22,7 @@ from vector_store import build_faiss_index, search_index, save_faiss_index, load
 
 RAG_PROMPT = """You are a helpful AI news research assistant.
 Answer the user question ONLY based on the provided news context below.
-If the answer is not in the context, say "I could not find relevant information in the current news."
+If the answer is not in the context, say "I could not🤷‍♀️ find relevant information in the current news."
 
 Always mention the source name and date when citing information.
 Be concise, clear and factual.
