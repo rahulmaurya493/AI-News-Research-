@@ -657,8 +657,9 @@ def render_sidebar():
         """, unsafe_allow_html=True)
 
         # API Keys
-        news_key = ""
-        groq_key = ""
+        st.markdown(\'<div class="sb-section">API Keys</div>\', unsafe_allow_html=True)
+        news_key = st.text_input("NewsAPI Key", type="password", placeholder="sk-…")
+        groq_key = st.text_input("Groq API Key", type="password", placeholder="gsk-…")
 
         # Query
         st.markdown(\'<div class="sb-section">News Topic</div>\', unsafe_allow_html=True)
@@ -720,8 +721,8 @@ def render_sidebar():
 
 # ─── BUILD PIPELINE ─────────────────────
 def build_pipeline(news_key, groq_key, query, max_articles, days_back):
-    nk = news_key or st.secrets.get("NEWS_KEY", "")
-    gk = groq_key or st.secrets.get("GROQ_KEY", "")
+    nk = news_key or st.secrets.get("news_key", "")
+    gk = groq_key or st.secrets.get("groq_key", "")
     if not nk or not gk:
         st.error("Enter both API keys in the sidebar.")
         return
@@ -989,12 +990,6 @@ def page_history():
 def main():
     news_key, groq_key, query, max_articles, days_back, build_btn = render_sidebar()
 
-    # Auto-build on first load with default topic
-    if not st.session_state.pipeline_ready and "auto_built" not in st.session_state:
-        st.session_state["auto_built"] = True
-        build_pipeline("", "", "India Business News Today", 10, 7)
-
-# Manual rebuild if user clicks button
     if build_btn:
         build_pipeline(news_key, groq_key, query, max_articles, days_back)
 
