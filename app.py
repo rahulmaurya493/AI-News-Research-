@@ -46,10 +46,13 @@ html, body, .stApp {
     color: var(--white) !important;
 }
 
+/* Hide default chrome, keep sidebar visible */
 #MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 0 !important; }
+.block-container {
+    padding: 2rem 2rem 4rem 2rem !important;
+    max-width: 100% !important;
+}
 
-/* SIDEBAR */
 section[data-testid="stSidebar"] {
     background: var(--bg2) !important;
     border-right: 1px solid var(--border2) !important;
