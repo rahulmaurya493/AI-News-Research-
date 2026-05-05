@@ -322,10 +322,10 @@ if __name__ == "__main__":
     API_KEY = st.secrets.get("news_key", "")
 
 # 2. Check if the key exists before connecting
-if not API_KEY:
-    st.error("❌ NewsAPI key not found in Streamlit Secrets!")
-    st.stop()
-    QUERY    = "RBI interest rates India"
+    if not API_KEY:
+        st.error("❌ NewsAPI key not found in Streamlit Secrets!")
+        st.stop()
+        QUERY    = "RBI interest rates India"
 
     # Step 1: Fetch articles
     client   = get_news_client(API_KEY)
