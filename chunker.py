@@ -319,7 +319,12 @@ if __name__ == "__main__":
     sys.path.append("src")
     from news_fetcher import get_news_client, fetch_articles, save_articles
 
-    API_KEY  = "2972c76c12ad48e4b4f49c7209494934"
+    API_KEY = st.secrets.get("news_key", "")
+
+# 2. Check if the key exists before connecting
+if not API_KEY:
+    st.error("❌ NewsAPI key not found in Streamlit Secrets!")
+    st.stop()
     QUERY    = "RBI interest rates India"
 
     # Step 1: Fetch articles
