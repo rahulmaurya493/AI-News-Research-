@@ -16,7 +16,8 @@ from nlp_extractor  import load_nlp_model, extract_from_articles, get_top_topics
 st.set_page_config(
     page_title = "NewsRAG AI",
     page_icon  = "🗞",
-    layout     = "wide"
+    layout     = "wide",
+    initial_sidebar_state = "expanded"
 )
 
 # ─────────────────────────────────────────
@@ -53,11 +54,27 @@ html, body, .stApp {
     max-width: 100% !important;
 }
 
+/* Always show sidebar, hide the collapse arrow button */
 section[data-testid="stSidebar"] {
     background: var(--bg2) !important;
     border-right: 1px solid var(--border2) !important;
+    min-width: 280px !important;
+    max-width: 320px !important;
+    transform: none !important;
+    visibility: visible !important;
+    display: block !important;
 }
-section[data-testid="stSidebar"] > div { padding: 0 !important; }
+section[data-testid="stSidebar"] > div {
+    padding: 0 !important;
+}
+/* Hide the collapse/expand toggle button */
+button[data-testid="collapsedControl"],
+button[kind="header"] {
+    display: none !important;
+}
+[data-testid="stSidebarCollapsedControl"] {
+    display: none !important;
+}
 
 .sidebar-header {
     padding: 28px 22px 18px 22px;
