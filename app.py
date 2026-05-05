@@ -143,25 +143,48 @@ label {
     box-shadow: 0 4px 18px rgba(232,201,122,0.28) !important;
 }
 
-/* NAV RADIO */
-div[data-testid="stRadio"] > label { display: none !important; }
-div[data-testid="stRadio"] > div { gap: 0 !important; flex-direction: column !important; }
-div[data-testid="stRadio"] > div > label {
+/* NAV BUTTONS */
+.nav-btn .stButton > button {
     font-family: \'DM Mono\', monospace !important;
-    font-size: 0.78rem !important;
-    color: var(--muted) !important;
-    text-transform: none !important;
+    font-size: 0.80rem !important;
+    font-weight: 400 !important;
     letter-spacing: 0 !important;
-    padding: 11px 22px !important;
     border-radius: 0 !important;
+    border: none !important;
     border-left: 2px solid transparent !important;
-    cursor: pointer !important;
+    background: transparent !important;
+    color: var(--muted) !important;
+    text-align: left !important;
+    padding: 11px 22px !important;
+    width: 100% !important;
     transition: all 0.15s !important;
 }
-div[data-testid="stRadio"] > div > label:hover {
+.nav-btn .stButton > button:hover {
     color: var(--white) !important;
     background: rgba(255,255,255,0.04) !important;
+    border-left-color: rgba(232,201,122,0.5) !important;
+    box-shadow: none !important;
+}
+.nav-btn-active .stButton > button {
+    font-family: \'DM Mono\', monospace !important;
+    font-size: 0.80rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    border-left: 2px solid var(--accent) !important;
+    background: rgba(232,201,122,0.07) !important;
+    color: var(--accent) !important;
+    text-align: left !important;
+    padding: 11px 22px !important;
+    width: 100% !important;
+    box-shadow: none !important;
+}
+.nav-btn-active .stButton > button:hover {
+    background: rgba(232,201,122,0.10) !important;
+    color: var(--accent) !important;
     border-left-color: var(--accent) !important;
+    box-shadow: none !important;
 }
 
 /* MAIN LAYOUT */
@@ -575,10 +598,26 @@ def render_sidebar():
                 f"{len(st.session_state.documents)} chunks"
             )
 
+        # ── Nav buttons ──
+        if "page" not in st.session_state:
+            st.session_state["page"] = "ask"
+
         st.markdown(\'<div class="sidebar-section" style="margin-top:14px">Navigate</div>\',
                     unsafe_allow_html=True)
-        page = st.radio("nav", ["🤖  Ask Questions", "🔍  NLP Analysis", "🗂️  History"],
-                        label_visibility="collapsed")
+
+        nav_items = [
+            ("ask",     "🤖  Ask Questions"),
+            ("nlp",     "🔍  NLP Analysis"),
+            ("history", "🗂️  History"),
+        ]
+        for key, label in nav_items:
+            active = st.session_state["page"] == key
+            btn_style = "nav-btn-active" if active else "nav-btn"
+            st.markdown(f\'<div class="{btn_style}">\', unsafe_allow_html=True)
+            if st.button(label, use_container_width=True, key=f"nav_{key}"):
+                st.session_state["page"] = key
+                st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown(\'<div class="sidebar-section" style="margin-top:14px">Quick Questions</div>\',
                     unsafe_allow_html=True)
@@ -587,7 +626,7 @@ def render_sidebar():
             if st.button(q, use_container_width=True, key=f"sample_{q}"):
                 st.session_state["sample_q"] = q
 
-    return news_key, groq_key, query, max_articles, days_back, build_btn, page
+    return news_key, groq_key, query, max_articles, days_back, build_btn
 
 
 # ─────────────────────────────────────────
@@ -865,16 +904,17 @@ def page_history():
 # MAIN
 # ─────────────────────────────────────────
 def main():
-    news_key, groq_key, query, max_articles, days_back, build_btn, page = render_sidebar()
+    news_key, groq_key, query, max_articles, days_back, build_btn = render_sidebar()
 
     if build_btn:
         build_pipeline(news_key, groq_key, query, max_articles, days_back)
 
-    if "Ask" in page:
+    page = st.session_state.get("page", "ask")
+    if page == "ask":
         page_ask()
-    elif "NLP" in page:
+    elif page == "nlp":
         page_nlp()
-    elif "History" in page:
+    elif page == "history":
         page_history()
 
     st.markdown("""
